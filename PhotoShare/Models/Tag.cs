@@ -2,7 +2,7 @@
 {
     public class Tag
     {
-        //Primary key
+        // Primary key
         public int TagId { get; set; }
 
         public string Name { get; set; } = string.Empty;
@@ -11,8 +11,7 @@
         public int PhotoId { get; set; }
 
         // Navigation property
-        public Photo? Photo { get; set; } //nullable!!
+        public Photo? Photo { get; set; } // nullable!!
     }
-
 
 }

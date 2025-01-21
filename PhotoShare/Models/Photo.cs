@@ -11,17 +11,15 @@ namespace PhotoShare.Models
 
         public string Description { get; set; } = string.Empty;
 
-        //[Display(Name = "Created")]
+        [Display(Name = "Date Created")]
         public DateTime CreatedAt { get; set; }
 
-        //[Display(Name = "Filename")]
+        [Display(Name = "Image Filename")]
         public string ImageFilename { get; set; } = string.Empty;
-        
-        public bool isPublic { get; set; } = false;
+
+        public bool IsPublic { get; set; } = false;
 
         // Navigation property
         public List<Photo>? Tags { get; set; } // nullable!!
     }
-
 }
-
