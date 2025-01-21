@@ -1,6 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿
 
+using System.ComponentModel.DataAnnotations;
 namespace PhotoShare.Models
+
 {
     public class Photo
     {
