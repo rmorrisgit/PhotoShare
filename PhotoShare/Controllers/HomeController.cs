@@ -23,7 +23,6 @@ namespace PhotoShare.Controllers
             Photo photo1 = new Photo()
             {
                 PhotoId = 1,
-                //Title = "My cat",
                 Description = "This is my cat",
                 ImageFilename = "cat.jpg",
                 IsVisible = true
@@ -33,7 +32,6 @@ namespace PhotoShare.Controllers
             Photo photo2 = new Photo();
 
             photo2.PhotoId = 2;
-            //photo2.Title = "Dog";
             photo2.Description = "This is my dog";
             photo2.ImageFilename = "dog.jpg";
             photo2.IsVisible = true;
@@ -42,7 +40,6 @@ namespace PhotoShare.Controllers
             Photo photo3 = new Photo();
 
             photo3.PhotoId = 3;
-            //photo3.Title = "Hamster";
             photo3.Description = "This is my hamster";
             photo3.ImageFilename = "hamster.jpg";
             photo3.IsVisible = true;
