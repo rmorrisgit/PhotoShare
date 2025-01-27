@@ -46,9 +46,16 @@ namespace PhotoShare.Controllers
         }
 
         // GET: Tags/Create
-        public IActionResult Create()
+        public IActionResult Create(int? id)
         {
-            ViewData["PhotoId"] = new SelectList(_context.Photo, "PhotoId", "PhotoId");
+
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["PhotoId"] = id;
+
             return View();
         }
 
@@ -63,7 +70,9 @@ namespace PhotoShare.Controllers
             {
                 _context.Add(tag);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                //redirect to /Photos/Edit/5
+                return RedirectToAction("Edit", "Photos", new { id = tag.PhotoId });
             }
             ViewData["PhotoId"] = new SelectList(_context.Photo, "PhotoId", "PhotoId", tag.PhotoId);
             return View(tag);
