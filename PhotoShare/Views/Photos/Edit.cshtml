@@ -48,6 +48,16 @@
             </div>
             <div class="mb-3">
                 <a asp-action="Create" asp-controller="Tags" asp-route-id="@Model.PhotoId" class="pe-2">Add new tag</a>
+
+                @if (Model.Tags != null)
+                {
+                    foreach (var tag in Model.Tags)
+                    {
+                        <span class="badge rounded-pill text-bg-light pe-2">@tag.Name <a asp-controller="Tags" asp-action="Delete" asp-route-id="@tag.TagId">x</a> </span>
+                    }
+                }
+
+
             </div>
         </form>
     </div>
