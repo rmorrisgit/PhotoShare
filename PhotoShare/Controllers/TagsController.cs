@@ -23,6 +23,8 @@ namespace PhotoShare.Controllers
         // GET: Tags/Details/5
         // GET: Tags/Edit/5
         // POST: Tags/Edit/5
+        // POST: Tags/Delete/5
+
 
         // GET: Tags/Create
         public IActionResult Create(int? id)
@@ -57,56 +59,34 @@ namespace PhotoShare.Controllers
             return View(tag);
         }
 
-    
+
 
         // GET: Tags/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            // id is the tag id
             if (id == null)
             {
                 return NotFound();
             }
 
-            var tag = await _context.Tag
-                .Include(t => t.Photo)
-                .FirstOrDefaultAsync(m => m.TagId == id);
+            var tag = await _context.Tag.FirstOrDefaultAsync(m => m.TagId == id);
 
             if (tag == null)
             {
                 return NotFound();
             }
 
-            return View(tag);
+            // set the photo id to pass to return to the Photo Details page
+            var photoId = tag.PhotoId;
+
+            // Remove the tag
+            _context.Tag.Remove(tag);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Edit", "Photos", new { id = photoId });
         }
 
-        // POST: Tags/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var tag = await _context.Tag
-                .Include(t => t.Photo)
-                .FirstOrDefaultAsync(m => m.TagId == id);
 
-            if (tag != null)
-            {
-                _context.Tag.Remove(tag);
-
-                await _context.SaveChangesAsync();
-
-                return RedirectToAction("Edit", "Photos", new { id = tag.Photo?.PhotoId });
-
-            }
-
-            return View(tag);
-
-
-            //redirect to /Photos/Edit/5
-        }
-
-        private bool TagExists(int id)
-        {
-            return _context.Tag.Any(e => e.TagId == id);
-        }
     }
 }
