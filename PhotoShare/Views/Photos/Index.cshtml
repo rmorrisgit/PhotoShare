@@ -12,6 +12,11 @@
 <table class="table">
     <thead>
         <tr>
+        <th>
+            Photograph
+        </th>
+
+
             <th>
                 @Html.DisplayNameFor(model => model.Description)
             </th>
@@ -21,9 +26,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Camera)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ImageFilename)
-            </th>
+            @* <th> *@
+            @*     @Html.DisplayNameFor(model => model.ImageFilename) *@
+            @* </th> *@
             <th>
                 @Html.DisplayNameFor(model => model.IsVisible)
             </th>
@@ -37,6 +42,10 @@
 @foreach (var item in Model) {
         <tr>
             <td>
+                <img src="/photos/@item.ImageFilename" alt="@item.Description" class="thumbnail" />
+            </td>
+
+            <td>
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
@@ -45,19 +54,19 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Camera)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImageFilename)
-            </td>
+            @* <td> *@
+            @*     @Html.DisplayFor(modelItem => item.ImageFilename) *@
+            @* </td> *@
             <td>
                 @Html.DisplayFor(modelItem => item.IsVisible)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CreatedAt)
+              @item.CreatedAt.ToString("MMM d, yyyy")
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.PhotoId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.PhotoId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.PhotoId">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.PhotoId" class="text-secondary"><i class="fa-regular fa-pen-to-square"></i></a> |
+                @* <a asp-action="Details" asp-route-id="@item.PhotoId">Details</a> | *@
+                    <a asp-action="Delete" asp-route-id="@item.PhotoId" class="text-secondary"><i class="fa-solid fa-trash"></i></a>
             </td>
         </tr>
 }

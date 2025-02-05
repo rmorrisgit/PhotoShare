@@ -28,24 +28,7 @@ namespace PhotoShare.Controllers
             return View(await _context.Photo.ToListAsync());
         }
 
-        // GET: Photos/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var photo = await _context.Photo.FirstOrDefaultAsync(m => m.PhotoId == id);
-
-            if (photo == null)
-            {
-                return NotFound();
-            }
-
-            return View(photo);
-        }
-
+  
         // GET: Photos/Create
         public IActionResult Create()
         {
