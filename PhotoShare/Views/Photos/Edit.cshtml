@@ -13,6 +13,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="PhotoId" />
             <input type="hidden" asp-for="ImageFilename" />
+            <input type="hidden" asp-for="ApplicationUserId" />
 
             <div class="mb-3 w-50">
                 <img src="/photos/@Model.ImageFilename" alt="@Model.Description" class="img-fluid" />

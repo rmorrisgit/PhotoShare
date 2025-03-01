@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Versioning;
 using PhotoShare.Data;
@@ -77,10 +78,6 @@ namespace PhotoShare.Controllers
                         await photo.ImageFile.CopyToAsync(fileStream);
                     }
                 }
-
-
-
-
                 return RedirectToAction(nameof(Index));
             }
             return View(photo);
@@ -94,9 +91,12 @@ namespace PhotoShare.Controllers
                 return NotFound();
             }
 
+            var userId = _userManager.GetUserId(User);
 
-            // Include the Tags List
-            var photo = await _context.Photo.Include(m => m.Tags).FirstOrDefaultAsync(m => m.PhotoId == id);
+            var photo = await _context.Photo
+                .Include(m => m.Tags)
+                .Where(m => m.ApplicationUserId == userId)
+                .FirstOrDefaultAsync(m => m.PhotoId == id);
 
             if (photo == null)
             {
@@ -110,7 +110,7 @@ namespace PhotoShare.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PhotoId,Description,Location,Camera,ImageFilename,IsVisible,CreatedAt")] Photo photo)
+        public async Task<IActionResult> Edit(int id, [Bind("PhotoId,Description,Location,Camera,ImageFilename,IsVisible,CreatedAt,ApplicationUserId")] Photo photo)
         {
             if (id != photo.PhotoId)
             {
@@ -148,8 +148,11 @@ namespace PhotoShare.Controllers
                 return NotFound();
             }
 
+            var userId = _userManager.GetUserId(User);
 
-            var photo = await _context.Photo.FirstOrDefaultAsync(m => m.PhotoId == id);
+            var photo = await _context.Photo
+                .Where(m => m.ApplicationUserId == userId)
+                .FirstOrDefaultAsync(m => m.PhotoId == id);
 
             if (photo == null)
             {
@@ -164,8 +167,16 @@ namespace PhotoShare.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var photo = await _context.Photo.FindAsync(id);
-            if (photo != null)
+            var userId = _userManager.GetUserId(User);
+            var photo = await _context.Photo
+                 .Where(m => m.ApplicationUserId == userId)
+                .FirstOrDefaultAsync(m => m.PhotoId == id);
+
+            if (photo == null)
+            {
+                return NotFound();
+            } 
+            else
             {
                 _context.Photo.Remove(photo);
             }
