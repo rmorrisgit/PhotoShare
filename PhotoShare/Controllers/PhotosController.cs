@@ -78,6 +78,7 @@ namespace PhotoShare.Controllers
                         await photo.ImageFile.CopyToAsync(fileStream);
                     }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
             return View(photo);

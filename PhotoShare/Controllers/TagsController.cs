@@ -86,6 +86,10 @@ namespace PhotoShare.Controllers
         // GET: Tags/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            //
+            // TODO: verify the the user ID for Photo matches the logged in user 
+            //
+
             // id is the tag id
             if (id == null)
             {

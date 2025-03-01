@@ -3,6 +3,21 @@
     ViewData["Title"] = "Get Photo";
     string imageUrl = Url.Content("/photos/" + @Model.ImageFilename);
  
+
+	@if (Model.ApplicationUser != null)
+	{
+    <div class="d-flex">
+    <div></div>
+        <div>
+        @Model.ApplicationUser.Name<br />
+        @if(Model.ApplicationUser.IsForHire == true)
+        {
+            <span>Available For Hire</span>
+        }
+        </div>
+    </div>
+    }
+
  <div class="w-50 mx-auto">
         <img src="@imageUrl" class="img-fluid" alt="@Model.Description" />
 </div>

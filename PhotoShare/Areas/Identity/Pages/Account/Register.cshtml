@@ -8,7 +8,7 @@
 
 <div class="row">
     <div class="col-md-4">
-        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" enctype="multipart/form-data">
             @* <h2>Create a new account.</h2> *@
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
@@ -30,6 +30,11 @@
             @* /// ///////////////////////// *@
             @* /// BEGIN: ApplicationUser custom fields *@
             @* /// ///////////////////////// *@
+            <div class="mb-3">
+                <label asp-for="Input.ImageFile" class="form-label"></label>
+                <input type="file" asp-for="Input.ImageFile" class="form-control" />
+                <span asp-validation-for="Input.ImageFile" class="text-danger"></span>
+            </div>
             <div class="mb-3">
                 <label asp-for="Input.Name" class="form-label"></label>
                 <input asp-for="Input.Name" class="form-control" />

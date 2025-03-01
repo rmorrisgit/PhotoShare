@@ -15,5 +15,8 @@ namespace PhotoShare.Data
 
         [PersonalData]
         public bool IsForHire { get; set; } = false;
+
+        [PersonalData]
+        public string ImageFilename { get; set; } = string.Empty;
     }
 }

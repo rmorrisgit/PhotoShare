@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using PhotoShare.Data;
+using PhotoShare.Models;
 
 namespace PhotoShare.Areas.Identity.Pages.Account
 {
@@ -71,7 +72,6 @@ namespace PhotoShare.Areas.Identity.Pages.Account
         /// </summary>
         public class InputModel
         {
-
             /// /////////////////////////
             /// BEGIN: ApplicationUser custom fields
             /// /////////////////////////
@@ -84,12 +84,16 @@ namespace PhotoShare.Areas.Identity.Pages.Account
 
             public string Location { get; set; }
 
+            [Display(Name = "Available for Hire")]
             public bool IsForHire { get; set; }
+
+            [Display(Name = "Profile Picture")]
+            public IFormFile ImageFile { get; set; }
 
             /// /////////////////////////
             /// END: ApplicationUser custom fields
             /// /////////////////////////
-         
+
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
@@ -142,6 +146,22 @@ namespace PhotoShare.Areas.Identity.Pages.Account
                 user.Bio = Input.Bio;
                 user.Location = Input.Location;
                 user.IsForHire = Input.IsForHire;
+
+                // Save the uploaded file after the photo is saved in the database.
+                if (Input.ImageFile != null)
+                {
+                    string imageFilename = Guid.NewGuid().ToString() + Path.GetExtension(Input.ImageFile?.FileName);
+
+                    string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "profile_img", imageFilename);
+
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await Input.ImageFile.CopyToAsync(fileStream);
+                    }
+
+                    user.ImageFilename = imageFilename;
+
+                }
                 /// /////////////////////////
                 /// END: ApplicationUser custom fields
                 /// /////////////////////////

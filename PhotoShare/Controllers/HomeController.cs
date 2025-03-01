@@ -32,6 +32,7 @@ namespace PhotoShare.Controllers
         {
             // To-do: Entity Framework - fetch the photo by id
             var photo = await _context.Photo
+                .Include(m => m.ApplicationUser)
                 .Include(m => m.Tags)
                 .FirstOrDefaultAsync(m => m.PhotoId == id);
 
