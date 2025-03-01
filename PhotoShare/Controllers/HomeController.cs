@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PhotoShare.Data;
@@ -38,6 +39,8 @@ namespace PhotoShare.Controllers
         }
 
         // Privacy page - ../Home/Privacy/
+        // only logged in users have access
+        [Authorize]
         public IActionResult Privacy()
         {
             return View();
