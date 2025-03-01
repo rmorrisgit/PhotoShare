@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Azure;
+using PhotoShare.Data;
 
 namespace PhotoShare.Models
 {
@@ -25,11 +26,6 @@ namespace PhotoShare.Models
         [Display(Name = "Photograph")]
         public IFormFile? ImageFile { get; set; } // nullable!
 
-
-
-
-
-
         [Display(Name = "Visibility")]
         public bool IsVisible { get; set; } = false;
 
@@ -38,5 +34,12 @@ namespace PhotoShare.Models
 
         // Navigation property
         public List<Tag>? Tags { get; set; }  // nullable!!!
+
+        // Foreign key (AspNetUsers table)
+        public string ApplicationUserId { get; set; } = string.Empty;
+
+        // Navigation property
+        public ApplicationUser? ApplicationUser { get; set; } // nullable!!!
+
     }
 }

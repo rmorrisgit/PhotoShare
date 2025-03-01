@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -17,18 +18,26 @@ namespace PhotoShare.Controllers
     public class PhotosController : Controller
     {
         private readonly PhotoShareContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         //constructor
 
-        public PhotosController(PhotoShareContext context)
+        public PhotosController(PhotoShareContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Photos
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Photo.ToListAsync());
+            var userId = _userManager.GetUserId(User);
+
+            var photos = await _context.Photo
+            .Where(m => m.ApplicationUserId == userId)
+            .ToListAsync();
+
+            return View(photos);
         }
 
   
@@ -48,6 +57,9 @@ namespace PhotoShare.Controllers
             photo.CreatedAt = DateTime.Now;
             // rename the uploaded file to a guid (unique filename). Set before photo saved in database.
             photo.ImageFilename = Guid.NewGuid().ToString() + Path.GetExtension(photo.ImageFile?.FileName);
+
+            //Set the user id of the person logged in 
+            photo.ApplicationUserId = _userManager.GetUserId(User);
 
 
             if (ModelState.IsValid)
