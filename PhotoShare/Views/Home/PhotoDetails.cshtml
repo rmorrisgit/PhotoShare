@@ -2,26 +2,32 @@
 @{
     ViewData["Title"] = "Get Photo";
     string imageUrl = Url.Content("/photos/" + @Model.ImageFilename);
- 
+}
 
-	@if (Model.ApplicationUser != null)
-	{
+@if (Model.ApplicationUser != null) {
     <div class="d-flex">
-    <div></div>
-        <div>
-        @Model.ApplicationUser.Name<br />
-        @if(Model.ApplicationUser.IsForHire == true)
-        {
-            <span>Available For Hire</span>
+		@if (!string.IsNullOrEmpty(Model.ApplicationUser.ImageFilename))
+		{
+            <div class="pe-2">
+            <img src="~/profile_img/@Model.ApplicationUser.ImageFilename" class="profile-thumbnail" alt="@Model.ApplicationUser.Name" />
+		    </div>
         }
+        <div>
+            @Model.ApplicationUser.Name
+            @if(Model.ApplicationUser.IsForHire == true)
+            {
+                <br />
+                <span class="text-primary" style="font-size: 0.9em">Available For Hire<i class="fa-solid fa-circle-check"></i></span>
+            }
         </div>
     </div>
-    }
+}
 
  <div class="w-50 mx-auto">
         <img src="@imageUrl" class="img-fluid" alt="@Model.Description" />
 </div>
-}
+
+
 <div class="text-secondary">
 <div>
             @Model.Description

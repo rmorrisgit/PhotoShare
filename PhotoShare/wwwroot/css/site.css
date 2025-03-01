@@ -3,9 +3,9 @@
     height: auto;
 }
 
-.profile-pic {
-    width: 150px;
-    height: auto;
+.profile-thumbnail {
+    width: 55px;
+    height: 55px;
     border-radius: 50%;
 }
 
