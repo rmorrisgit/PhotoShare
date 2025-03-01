@@ -3,7 +3,7 @@
     ViewData["Title"] = "Get Photo";
     string imageUrl = Url.Content("/photos/" + @Model.ImageFilename);
  
-    <div>
+ <div class="w-50 mx-auto">
         <img src="@imageUrl" class="img-fluid" alt="@Model.Description" />
 </div>
 }
@@ -37,12 +37,8 @@
                 }
 </div>
         }
-        else
-        {
-<div>No Tags</div>
-        }
  
         </div>
  
    
-</div
+</div>
