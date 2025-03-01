@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -16,10 +17,13 @@ namespace PhotoShare.Controllers
     public class TagsController : Controller
     {
         private readonly PhotoShareContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public TagsController(PhotoShareContext context)
+        public TagsController(PhotoShareContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
+
         }
         //DELETED THESE ACTIONS
         // GET: Tags
@@ -30,13 +34,24 @@ namespace PhotoShare.Controllers
 
 
         // GET: Tags/Create
-        public IActionResult Create(int? id)
+        public async Task<IActionResult> CreateAsync(int? id)
         {
 
             if (id == null)
             {
                 return NotFound();
             }
+
+            var userId = _userManager.GetUserId(User);
+            var photo = await _context.Photo
+                 .Where(m => m.ApplicationUserId == userId)
+                .FirstOrDefaultAsync(m => m.PhotoId == id);
+
+            if (photo == null)
+            {
+                return NotFound();
+            }
+
 
             ViewData["PhotoId"] = id;
 
@@ -50,6 +65,10 @@ namespace PhotoShare.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("TagId,Name,PhotoId")] Tag tag)
         {
+            //
+            // TODO: embed the user ID in the form and validate 
+            //
+
             if (ModelState.IsValid)
             {
                 _context.Add(tag);
