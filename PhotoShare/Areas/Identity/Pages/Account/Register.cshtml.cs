@@ -71,6 +71,25 @@ namespace PhotoShare.Areas.Identity.Pages.Account
         /// </summary>
         public class InputModel
         {
+
+            /// /////////////////////////
+            /// BEGIN: ApplicationUser custom fields
+            /// /////////////////////////
+            [Required]
+            [Display(Name = "Username")]
+            public string Name { get; set; }
+
+            [Display(Name = "Short Bio")]
+            public string Bio { get; set; }
+
+            public string Location { get; set; }
+
+            public bool IsForHire { get; set; }
+
+            /// /////////////////////////
+            /// END: ApplicationUser custom fields
+            /// /////////////////////////
+         
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
@@ -114,6 +133,19 @@ namespace PhotoShare.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
+
+
+                /// /////////////////////////
+                /// BEGIN: ApplicationUser custom fields
+                /// /////////////////////////
+                user.Name = Input.Name;
+                user.Bio = Input.Bio;
+                user.Location = Input.Location;
+                user.IsForHire = Input.IsForHire;
+                /// /////////////////////////
+                /// END: ApplicationUser custom fields
+                /// /////////////////////////
+
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
