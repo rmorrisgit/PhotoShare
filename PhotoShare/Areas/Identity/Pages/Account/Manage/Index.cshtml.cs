@@ -9,7 +9,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Build.Framework;
 using PhotoShare.Data;
+using RequiredAttribute = System.ComponentModel.DataAnnotations.RequiredAttribute;
 
 namespace PhotoShare.Areas.Identity.Pages.Account.Manage
 {
@@ -52,6 +54,27 @@ namespace PhotoShare.Areas.Identity.Pages.Account.Manage
         /// </summary>
         public class InputModel
         {
+
+            /// /////////////////////////
+            /// BEGIN: ApplicationUser custom fields
+            /// /////////////////////////
+            [Required]
+            [Display(Name = "Username")]
+            public string Name { get; set; }
+
+            [Display(Name = "Short Bio")]
+            public string Bio { get; set; }
+
+            [Display(Name = "Location")]
+            public string Location { get; set; }
+
+            [Display(Name = "For Hire")]
+            public bool IsForHire { get; set; }
+
+            /// /////////////////////////
+            /// END: ApplicationUser custom fields
+            /// /////////////////////////
+
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
@@ -110,6 +133,33 @@ namespace PhotoShare.Areas.Identity.Pages.Account.Manage
                     return RedirectToPage();
                 }
             }
+            /// /////////////////////////
+            /// BEGIN: ApplicationUser custom fields
+            /// /////////////////////////
+            if (Input.Name != user.Name)
+            {
+                user.Name = Input.Name;
+            }
+
+            if (Input.Bio != user.Bio)
+            {
+                user.Bio = Input.Bio;
+            }
+            if (Input.Location != user.Location)
+            {
+                user.Location = Input.Location;
+            }
+
+            if (Input.IsForHire != user.IsForHire)
+            {
+                user.IsForHire = Input.IsForHire;
+            }
+
+            await _userManager.UpdateAsync(user);
+
+            /// /////////////////////////
+            /// END: ApplicationUser custom fields
+            /// /////////////////////////
 
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";
