@@ -1,31 +1,48 @@
 ﻿@model PhotoShare.Models.Photo
 @{
-    ViewData["Title"] = "Photo Details";
+    ViewData["Title"] = "Get Photo";
+    string imageUrl = Url.Content("/photos/" + @Model.ImageFilename);
+ 
+    <div>
+        <img src="@imageUrl" class="img-fluid" alt="@Model.Description" />
+</div>
 }
-<table class="table">
-    <tr>
-        <td>
-            @Html.DisplayNameFor(model => model.PhotoId)
-        </td>
-        <td>
-            @Html.DisplayFor(model => model.PhotoId)
-        </td>
-    </tr>
-
-    <tr>
-        <td>
-            @Html.DisplayNameFor(model => model.CreatedAt)
-        </td>
-        <td>
-            @Html.DisplayFor(model => model.CreatedAt)
-        </td>
-    </tr>
-    <tr>
-        <td>
-            @Html.DisplayNameFor(model => model.ImageFilename)
-        </td>
-        <td>
-            @Html.DisplayFor(model => model.ImageFilename)
-        </td>
-    </tr>
-</table>
+<div class="text-secondary">
+<div>
+            @Model.Description
+</div>
+<br />
+<div>
+<i class="fa-regular fa-calendar-days"></i> @Model.CreatedAt.ToString("MMM d, yyyy")
+</div>
+<div>
+<i class="fa-solid fa-location-dot"></i> @Model.Location
+</div>
+ 
+        <div>
+<i class="fa-solid fa-camera"></i> @Model.Camera
+</div>
+<br />
+<div>
+ 
+        @if (Model.Tags != null && Model.Tags.Any())
+        {
+<div>
+                @foreach (var tag in Model.Tags)
+                {
+<span class="pe-2 badge text-bg-secondary">
+                        @tag.Name
+<a asp-controller="Tags" asp-action="Details" asp-route-id="@tag.TagId"></a>
+</span>
+                }
+</div>
+        }
+        else
+        {
+<div>No Tags</div>
+        }
+ 
+        </div>
+ 
+   
+</div

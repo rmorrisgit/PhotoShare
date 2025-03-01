@@ -30,7 +30,9 @@ namespace PhotoShare.Controllers
         public async Task<IActionResult> PhotoDetails(int id)
         {
             // To-do: Entity Framework - fetch the photo by id
-            var photo = await _context.Photo.FirstOrDefaultAsync(m => m.PhotoId == id);
+            var photo = await _context.Photo
+                .Include(m => m.Tags)
+                .FirstOrDefaultAsync(m => m.PhotoId == id);
 
             return View(photo);
         }
