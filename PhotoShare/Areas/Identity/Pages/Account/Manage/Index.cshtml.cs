@@ -71,6 +71,10 @@ namespace PhotoShare.Areas.Identity.Pages.Account.Manage
             [Display(Name = "For Hire")]
             public bool IsForHire { get; set; }
 
+            public string ImageFilename { get; set; }
+
+            [Display(Name = "Profile Picture")]
+            public IFormFile ImageFile { get; set; }
             /// /////////////////////////
             /// END: ApplicationUser custom fields
             /// /////////////////////////
@@ -93,6 +97,19 @@ namespace PhotoShare.Areas.Identity.Pages.Account.Manage
 
             Input = new InputModel
             {
+                /// /////////////////////////
+                /// BEGIN: ApplicationUser custom fields
+                /// /////////////////////////
+                Name = user.Name,
+                Bio = user.Bio,
+                Location = user.Location,
+                IsForHire = user.IsForHire,
+                ImageFilename = user.ImageFilename,
+
+                /// /////////////////////////
+                /// END: ApplicationUser custom fields
+                /// /////////////////////////
+
                 PhoneNumber = phoneNumber
             };
         }
@@ -153,6 +170,21 @@ namespace PhotoShare.Areas.Identity.Pages.Account.Manage
             if (Input.IsForHire != user.IsForHire)
             {
                 user.IsForHire = Input.IsForHire;
+            }
+            // Save the uploaded file after the photo is saved in the database.
+            if (Input.ImageFile != null)
+            {
+                string imageFilename = Guid.NewGuid().ToString() + Path.GetExtension(Input.ImageFile?.FileName);
+
+                string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "profile_img", imageFilename);
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await Input.ImageFile.CopyToAsync(fileStream);
+                }
+
+                user.ImageFilename = imageFilename; // change the filename  
+
             }
 
             await _userManager.UpdateAsync(user);
